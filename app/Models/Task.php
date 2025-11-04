@@ -24,6 +24,10 @@ class Task extends Model
         'due_date',
     ];
 
+    protected $casts = [
+        'due_date' => 'datetime',
+    ];
+
     /**
      * Lấy dự án mà task này thuộc về.
      */
