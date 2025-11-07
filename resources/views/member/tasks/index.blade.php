@@ -1,70 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
+
 <head>
     <meta charset="UTF-8">
-    <title>Danh sách task</title>
+    <title>Danh sách dự án</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Danh sách task của tôi</h1>
-    <a href="{{ route('member.dashboard') }}">← Về Dashboard</a>
 
-    <h3>Filter</h3>
-    <form method="GET" action="{{ route('member.tasks.index') }}">
-        <label>Status:
-            <select name="status">
-                <option value="">-- Tất cả --</option>
-                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                <option value="done" {{ request('status') == 'done' ? 'selected' : '' }}>Done</option>
-            </select>
-        </label>
+<body class="bg-light">
 
-        <label>Priority:
-            <select name="priority">
-                <option value="">-- Tất cả --</option>
-                <option value="low" {{ request('priority') == 'low' ? 'selected' : '' }}>Low</option>
-                <option value="medium" {{ request('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
-                <option value="high" {{ request('priority') == 'high' ? 'selected' : '' }}>High</option>
-            </select>
-        </label>
+    <div class="container py-4">
+        <h1 class="mb-4">Danh sách dự án</h1>
 
-        <button type="submit">Lọc</button>
-        <a href="{{ route('member.tasks.index') }}">Reset</a>
-    </form>
+        <form method="GET" class="row g-3 mb-4">
+            <div class="col-md-3">
+                <select name="status" class="form-select">
+                    <option value="">-- Tất cả trạng thái --</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>In Progress
+                    </option>
+                    <option value="done" {{ request('status') == 'done' ? 'selected' : '' }}>Done</option>
+                </select>
+            </div>
 
-    @if($tasks->isEmpty())
-        <p>Không có task nào.</p>
-    @else
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tiêu đề</th>
-                    <th>Dự án</th>
-                    <th>Status</th>
-                    <th>Priority</th>
-                    <th>Due Date</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($tasks as $task)
-                <tr>
-                    <td>{{ $task->id }}</td>
-                    <td>{{ $task->title }}</td>
-                    <td>{{ $task->project->name }}</td>
-                    <td>{{ $task->status }}</td>
-                    <td>{{ $task->priority }}</td>
-                    <td>{{ $task->due_date ?? 'N/A' }}</td>
-                    <td>
-                        <a href="{{ route('member.tasks.show', $task->id) }}">Xem</a>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+            <div class="col-md-3">
+                <select name="priority" class="form-select">
+                    <option value="">-- Tất cả độ ưu tiên --</option>
+                    <option value="low" {{ request('priority') == 'low' ? 'selected' : '' }}>Low</option>
+                    <option value="medium" {{ request('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
+                    <option value="high" {{ request('priority') == 'high' ? 'selected' : '' }}>High</option>
+                </select>
+            </div>
 
-        {{ $tasks->links() }}
-    @endif
+            <div class="col-md-3">
+                <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm theo tiêu đề..."
+                    value="{{ request('keyword') }}">
+            </div>
+
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">Lọc</button>
+            </div>
+        </form>
+
+        @if ($tasks->isEmpty())
+            <div class="alert alert-warning">Không có task nào được tìm thấy.</div>
+        @else
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tiêu đề</th>
+                        <th>Dự án</th>
+                        <th>Ưu tiên</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày đến hạn</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($tasks as $task)
+                        <tr>
+                            <td>{{ $task->id }}</td>
+                            <td>{{ $task->title }}</td>
+                            <td>{{ $task->project->name }}</td>
+                            <td><span
+                                    class="badge bg-{{ $task->priority == 'high' ? 'danger' : ($task->priority == 'medium' ? 'warning' : 'secondary') }}">{{ ucfirst($task->priority) }}</span>
+                            </td>
+                            <td>{{ ucfirst($task->status) }}</td>
+                            <td>{{ $task->due_date ?? '—' }}</td>
+                            <td><a href="{{ route('member.tasks.show', $task->id) }}"
+                                    class="btn btn-sm btn-outline-primary">Xem</a></td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            {{ $tasks->links() }}
+        @endif
+    </div>
+
 </body>
+
 </html>

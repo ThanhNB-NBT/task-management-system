@@ -33,6 +33,14 @@ class TaskController extends Controller
             $query->where('project_id', $request->project_id);
         }
 
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('title', 'like', "%{$keyword}%")
+                    ->orWhere('description', 'like', "%{$keyword}%");
+            });
+        }
+
         // Sắp xếp theo due_date
         $tasks = $query->orderBy('due_date', 'asc')
             ->orderBy('priority', 'desc')
@@ -72,22 +80,31 @@ class TaskController extends Controller
         $task = $user->tasks()->findOrFail($id);
 
         $oldStatus = $task->status;
-        $task->update(['status' => $request->status]);
+        $newStatus = $request->status;
+
+        $task->update([
+            'status' => $newStatus,
+            'completed_at' => $newStatus === 'done' ? now() : null,
+        ]);
 
         // Ghi lịch sử thay đổi
         $task->histories()->create([
             'user_id' => $user->id,
             'action' => 'update_status',
-            'old_value' => ['status' => $oldStatus],
-            'new_value' => ['status' => $request->status],
+            'old_value' => json_encode(['status' => $oldStatus]),
+            'new_value' => json_encode(['status' => $newStatus]),
         ]);
 
-        // Tạo thông báo cho leader
-        $task->project->leader->notifications()->create([
-            'message' => "{$user->name} đã cập nhật trạng thái task '{$task->title}' thành: {$request->status}",
-            'is_read' => false,
-        ]);
+        // Gửi thông báo cho leader (nếu có)
+        if ($task->project && $task->project->leader) {
+            $task->project->leader->notifications()->create([
+                'message' => "{$user->name} đã cập nhật trạng thái task '{$task->title}' thành: {$newStatus}",
+                'is_read' => false,
+            ]);
+        }
 
-        return redirect()->back()->with('success', 'Cập nhật trạng thái thành công!');
+        return redirect()
+            ->route('member.tasks.show', $task->id)
+            ->with('success', 'Cập nhật trạng thái thành công!');
     }
 }
