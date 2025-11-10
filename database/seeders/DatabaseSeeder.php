@@ -18,13 +18,13 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call([
-            // UserSeeder::class,
-            // ProjectSeeder::class,
+            UserSeeder::class,
+            ProjectSeeder::class,
             ProjectMemberSeeder::class,
-            // TaskSeeder::class,
-            // TaskCommentSeeder::class,
-            // TaskHistorySeeder::class,
-            // NotificationSeeder::class,
+            TaskSeeder::class,
+            TaskCommentSeeder::class,
+            TaskHistorySeeder::class,
+            NotificationSeeder::class,
         ]);
     }
 }
