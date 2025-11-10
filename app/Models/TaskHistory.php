@@ -28,6 +28,7 @@ class TaskHistory extends Model
     protected $casts = [
         'old_value' => 'array',
         'new_value' => 'array',
+        'created_at' => 'datetime',
     ];
 
     /**
