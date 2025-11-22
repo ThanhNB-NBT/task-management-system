@@ -3,9 +3,6 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ProjectMember>
- */
 class ProjectMemberFactory extends Factory
 {
     /**
@@ -16,7 +13,6 @@ class ProjectMemberFactory extends Factory
     public function definition(): array
     {
         return [
-            // 'project_id' và 'user_id' sẽ được gán trong Seeder
             'role_in_project' => $this->faker->randomElement(['leader', 'member']),
         ];
     }

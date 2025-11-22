@@ -10,9 +10,7 @@ use App\Models\TaskHistory;
 
 class TaskHistorySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+
     public function run(): void
     {
         $tasks = Task::all();

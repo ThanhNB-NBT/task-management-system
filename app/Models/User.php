@@ -54,47 +54,27 @@ class User extends Authenticatable
     {
         return $query->where('role', 'member');
     }
-
-    // ===============================================
-    // THÊM CÁC HÀM QUAN HỆ VÀO ĐÂY
-    // ===============================================
-
-    /**
-     * Các dự án mà User này làm leader.
-     */
     public function ledProjects()
     {
         return $this->hasMany(Project::class, 'leader_id');
     }
 
-    /**
-     * Các dự án mà User này tham gia (với tư cách member).
-     */
     public function projects()
     {
         return $this->belongsToMany(Project::class, 'project_members');
     }
 
-    /**
-     * Các task được gán cho User này.
-     */
     public function tasks()
     {
         return $this->hasMany(Task::class, 'assignee_id');
     }
 
-    /**
-     * Các bình luận mà User này đã viết.
-     */
     public function comments()
     {
         return $this->hasMany(TaskComment::class);
     }
 
-    /**
-     * Các thông báo của User này.
-     */
-    public function notifications()
+    public function systemNotifications()
     {
         return $this->hasMany(Notification::class);
     }

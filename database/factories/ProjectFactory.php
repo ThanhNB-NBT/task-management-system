@@ -3,9 +3,6 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Project>
- */
 class ProjectFactory extends Factory
 {
     /**
@@ -20,7 +17,6 @@ class ProjectFactory extends Factory
             'description' => $this->faker->paragraph(3),
             'start_date'  => $this->faker->dateTimeBetween('-1 month', '+1 month'),
             'end_date'    => $this->faker->dateTimeBetween('+2 months', '+6 months'),
-            // 'leader_id' sẽ được gán trong Seeder
         ];
     }
 }

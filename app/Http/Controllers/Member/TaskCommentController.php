@@ -9,28 +9,42 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskCommentController extends Controller
 {
-    /**
-     * M5: Thêm comment vào task
-     */
+
     public function store(Request $request, $taskId)
     {
-        // Validate và lấy luôn data đã validate
         $validated = $request->validate([
-            'content' => 'required|string|max:1000'
+            'content' => 'required_without:attachment|string|max:1000',
+            'attachment' => 'sometimes|file|max:10240|mimes:png,jpg,jpeg,gif,pdf,doc,docx,xls,xlsx,txt,zip,rar',
         ]);
 
         $user = Auth::user();
 
-        // Kiểm tra task có phải của mình không
         $task = $user->tasks()->findOrFail($taskId);
 
-        // Tạo comment
         $comment = $task->comments()->create([
             'user_id' => $user->id,
-            'content' => $validated['content'],
+            'content' => $validated['content'] ?? null,
         ]);
 
-        // Ghi lịch sử
+        // Handle optional attachment
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $originalName = $file->getClientOriginalName();
+            $mime = $file->getClientMimeType();
+            $size = $file->getSize();
+
+            $path = $file->store("comment_attachments/{$task->id}", 'public');
+
+            \App\Models\CommentAttachment::create([
+                'comment_id' => $comment->id,
+                'user_id' => $user->id,
+                'path' => $path,
+                'original_name' => $originalName,
+                'mime_type' => $mime,
+                'size' => $size,
+            ]);
+        }
+
         $task->histories()->create([
             'user_id' => $user->id,
             'action' => 'add_comment',
@@ -38,8 +52,7 @@ class TaskCommentController extends Controller
             'new_value' => ['comment' => $validated['content']],
         ]);
 
-        // Thông báo cho leader
-        $task->project->leader->notifications()->create([
+        $task->project->leader->systemNotifications()->create([
             'message' => "{$user->name} đã bình luận trên task '{$task->title}'",
             'is_read' => false,
         ]);

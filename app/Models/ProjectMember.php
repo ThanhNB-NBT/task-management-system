@@ -34,17 +34,11 @@ class ProjectMember extends Model
         'role_in_project',
     ];
 
-    /**
-     * Lấy dự án.
-     */
     public function project()
     {
         return $this->belongsTo(Project::class);
     }
 
-    /**
-     * Lấy thành viên (user).
-     */
     public function user()
     {
         return $this->belongsTo(User::class);

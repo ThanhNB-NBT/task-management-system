@@ -9,49 +9,38 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    /**
-     * M3: Hiển thị danh sách task được giao
-     */
+
     public function index(Request $request)
     {
         $user = Auth::user();
 
         $query = $user->tasks()->with(['project', 'assignee']);
 
-        // Filter theo status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        // Filter theo priority
         if ($request->filled('priority')) {
             $query->where('priority', $request->priority);
         }
 
-        // Filter theo dự án
         if ($request->filled('project_id')) {
             $query->where('project_id', $request->project_id);
         }
 
-        // Sắp xếp theo due_date
         $tasks = $query->orderBy('due_date', 'asc')
             ->orderBy('priority', 'desc')
             ->paginate(15);
 
-        // Lấy danh sách dự án để filter
         $projects = $user->projects()->get();
 
         return view('member.tasks.index', compact('tasks', 'projects'));
     }
 
-    /**
-     * Xem chi tiết task
-     */
     public function show($id)
     {
         $user = Auth::user();
 
-        // Chỉ xem được task của mình
         $task = $user->tasks()
             ->with(['project', 'comments.user', 'histories.user'])
             ->findOrFail($id);
@@ -59,9 +48,6 @@ class TaskController extends Controller
         return view('member.tasks.show', compact('task'));
     }
 
-    /**
-     * M4: Cập nhật trạng thái task
-     */
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
@@ -74,7 +60,6 @@ class TaskController extends Controller
         $oldStatus = $task->status;
         $task->update(['status' => $request->status]);
 
-        // Ghi lịch sử thay đổi
         $task->histories()->create([
             'user_id' => $user->id,
             'action' => 'update_status',
@@ -82,8 +67,7 @@ class TaskController extends Controller
             'new_value' => ['status' => $request->status],
         ]);
 
-        // Tạo thông báo cho leader
-        $task->project->leader->notifications()->create([
+        $task->project->leader->systemNotifications()->create([
             'message' => "{$user->name} đã cập nhật trạng thái task '{$task->title}' thành: {$request->status}",
             'is_read' => false,
         ]);

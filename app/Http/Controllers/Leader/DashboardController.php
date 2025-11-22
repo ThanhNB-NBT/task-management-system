@@ -7,14 +7,11 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    /**
-     * Dashboard cho Leader
-     */
+
     public function index()
     {
         $user = Auth::user();
 
-        // Thống kê các dự án mà leader quản lý
         $myProjects = $user->ledProjects()->withCount('tasks', 'members')->get();
 
         $stats = [
@@ -22,8 +19,6 @@ class DashboardController extends Controller
             'total_tasks' => $user->ledProjects()->withCount('tasks')->get()->sum('tasks_count'),
             'total_members' => $user->ledProjects()->withCount('members')->get()->sum('members_count'),
         ];
-
-        // Task statistics từ tất cả dự án của leader
         $taskStats = [
             'pending' => 0,
             'in_progress' => 0,
@@ -38,14 +33,12 @@ class DashboardController extends Controller
 
         $stats = array_merge($stats, $taskStats);
 
-        // Dự án đang quản lý
         $projects = $user->ledProjects()
             ->with(['tasks', 'members'])
             ->withCount(['tasks', 'members'])
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // Task cần chú ý trong các dự án của mình
         $criticalTasks = collect();
         foreach ($myProjects as $project) {
             $tasks = $project->tasks()
@@ -64,7 +57,6 @@ class DashboardController extends Controller
 
         $criticalTasks = $criticalTasks->sortBy('due_date')->take(10);
 
-        // Hoạt động gần đây trong các dự án
         $recentActivities = collect();
         foreach ($myProjects as $project) {
             $histories = $project->tasks()

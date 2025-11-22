@@ -20,19 +20,18 @@ class TaskComment extends Model
         'content',
     ];
 
-    /**
-     * Lấy task mà bình luận này thuộc về.
-     */
     public function task()
     {
         return $this->belongsTo(Task::class);
     }
 
-    /**
-     * Lấy user (tác giả) của bình luận.
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function attachments()
+    {
+        return $this->hasMany(CommentAttachment::class, 'comment_id');
     }
 }

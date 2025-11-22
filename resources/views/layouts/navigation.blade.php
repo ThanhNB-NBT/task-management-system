@@ -15,6 +15,42 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @auth
+                        @php $role = Auth::user()->role ?? 'member'; @endphp
+
+                        @if($role === 'admin')
+                            @if(Route::has('admin.users.index'))
+                                <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">{{ __('Users') }}</x-nav-link>
+                            @endif
+                            @if(Route::has('admin.projects.index'))
+                                <x-nav-link :href="route('admin.projects.index')" :active="request()->routeIs('admin.projects.*')">{{ __('Projects') }}</x-nav-link>
+                            @endif
+                            @if(Route::has('admin.reports'))
+                                <x-nav-link :href="route('admin.reports')" :active="request()->routeIs('admin.reports')">{{ __('Reports') }}</x-nav-link>
+                            @endif
+                        @elseif($role === 'leader')
+                            @if(Route::has('leader.projects.index'))
+                                <x-nav-link :href="route('leader.projects.index')" :active="request()->routeIs('leader.projects.*')">{{ __('Projects') }}</x-nav-link>
+                            @endif
+                            @if(Route::has('leader.tasks.index'))
+                                <x-nav-link :href="route('leader.tasks.index')" :active="request()->routeIs('leader.tasks.*')">{{ __('Tasks') }}</x-nav-link>
+                            @endif
+                            @if(Route::has('leader.team'))
+                                <x-nav-link :href="route('leader.team')" :active="request()->routeIs('leader.team')">{{ __('Team') }}</x-nav-link>
+                            @endif
+                        @else
+                            @if(Route::has('member.projects.index'))
+                                <x-nav-link :href="route('member.projects.index')" :active="request()->routeIs('member.projects.*')">{{ __('Projects') }}</x-nav-link>
+                            @endif
+                            @if(Route::has('member.tasks.index'))
+                                <x-nav-link :href="route('member.tasks.index')" :active="request()->routeIs('member.tasks.*')">{{ __('Tasks') }}</x-nav-link>
+                            @endif
+                            @if(Route::has('member.notifications.index'))
+                                <x-nav-link :href="route('member.notifications.index')" :active="request()->routeIs('member.notifications.*')">{{ __('Notifications') }}</x-nav-link>
+                            @endif
+                        @endif
+                    @endauth
                 </div>
             </div>
 
@@ -70,6 +106,41 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            @auth
+                @php $role = Auth::user()->role ?? 'member'; @endphp
+                @if($role === 'admin')
+                    @if(Route::has('admin.users.index'))
+                        <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">{{ __('Users') }}</x-responsive-nav-link>
+                    @endif
+                    @if(Route::has('admin.projects.index'))
+                        <x-responsive-nav-link :href="route('admin.projects.index')" :active="request()->routeIs('admin.projects.*')">{{ __('Projects') }}</x-responsive-nav-link>
+                    @endif
+                    @if(Route::has('admin.reports'))
+                        <x-responsive-nav-link :href="route('admin.reports')" :active="request()->routeIs('admin.reports')">{{ __('Reports') }}</x-responsive-nav-link>
+                    @endif
+                @elseif($role === 'leader')
+                    @if(Route::has('leader.projects.index'))
+                        <x-responsive-nav-link :href="route('leader.projects.index')" :active="request()->routeIs('leader.projects.*')">{{ __('Projects') }}</x-responsive-nav-link>
+                    @endif
+                    @if(Route::has('leader.tasks.index'))
+                        <x-responsive-nav-link :href="route('leader.tasks.index')" :active="request()->routeIs('leader.tasks.*')">{{ __('Tasks') }}</x-responsive-nav-link>
+                    @endif
+                    @if(Route::has('leader.team'))
+                        <x-responsive-nav-link :href="route('leader.team')" :active="request()->routeIs('leader.team')">{{ __('Team') }}</x-responsive-nav-link>
+                    @endif
+                @else
+                    @if(Route::has('member.projects.index'))
+                        <x-responsive-nav-link :href="route('member.projects.index')" :active="request()->routeIs('member.projects.*')">{{ __('Projects') }}</x-responsive-nav-link>
+                    @endif
+                    @if(Route::has('member.tasks.index'))
+                        <x-responsive-nav-link :href="route('member.tasks.index')" :active="request()->routeIs('member.tasks.*')">{{ __('Tasks') }}</x-responsive-nav-link>
+                    @endif
+                    @if(Route::has('member.notifications.index'))
+                        <x-responsive-nav-link :href="route('member.notifications.index')" :active="request()->routeIs('member.notifications.*')">{{ __('Notifications') }}</x-responsive-nav-link>
+                    @endif
+                @endif
+            @endauth
         </div>
 
         <!-- Responsive Settings Options -->

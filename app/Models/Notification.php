@@ -20,11 +20,16 @@ class Notification extends Model
         'is_read',
     ];
 
+    // We only have a `created_at` column (no `updated_at`), so disable automatic
+    // timestamps but cast `created_at` to a datetime so views can call
+    // `diffForHumans()` on it.
     public $timestamps = false;
 
-    /**
-     * LSấy user (người nhận) của thông báo.
-     */
+    protected $casts = [
+        'is_read' => 'boolean',
+        'created_at' => 'datetime',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
