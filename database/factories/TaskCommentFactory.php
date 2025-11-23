@@ -3,9 +3,6 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TaskComment>
- */
 class TaskCommentFactory extends Factory
 {
     /**
@@ -16,7 +13,6 @@ class TaskCommentFactory extends Factory
     public function definition(): array
     {
         return [
-            // 'task_id' và 'user_id' sẽ được gán trong Seeder
             'content' => $this->faker->paragraph(1),
         ];
     }

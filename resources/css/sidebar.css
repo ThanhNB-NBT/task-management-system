@@ -1,0 +1,67 @@
+/* Sidebar Styles */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 250px;
+    background: #2c3e50;
+    color: white;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    padding: 1rem 0;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 1rem;
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: white;
+}
+
+.sidebar .nav-link {
+    color: rgba(255,255,255,0.8);
+    padding: 0.8rem 1rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.sidebar .nav-link:hover {
+    color: white;
+    background: rgba(255,255,255,0.1);
+}
+
+.sidebar .nav-link.active {
+    color: white;
+    background: #3498db;
+}
+
+.sidebar .nav-link i {
+    width: 20px;
+    text-align: center;
+    margin-right: 8px;
+}
+
+.sidebar hr {
+    border-color: rgba(255,255,255,0.1);
+    margin: 1rem 0;
+}
+
+/* Badge styling */
+.sidebar .badge {
+    font-size: 0.75rem;
+    padding: 0.25em 0.6em;
+}
+
+/* Main content adjustment */
+.main-content {
+    margin-left: 250px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}

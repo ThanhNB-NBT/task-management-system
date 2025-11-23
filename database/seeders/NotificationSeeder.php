@@ -9,9 +9,7 @@ use App\Models\Notification;
 
 class NotificationSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+
     public function run(): void
     {
         $userIds = User::pluck('id');

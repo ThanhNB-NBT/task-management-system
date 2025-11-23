@@ -28,35 +28,28 @@ class Task extends Model
         'due_date' => 'datetime',
     ];
 
-    /**
-     * Lấy dự án mà task này thuộc về.
-     */
     public function project()
     {
         return $this->belongsTo(Project::class);
     }
 
-    /**
-     * Lấy người được gán (assignee) task.
-     */
     public function assignee()
     {
         return $this->belongsTo(User::class, 'assignee_id');
     }
 
-    /**
-     * Lấy tất cả bình luận của task.
-     */
     public function comments()
     {
         return $this->hasMany(TaskComment::class);
     }
 
-    /**
-     * Lấy tất cả lịch sử thay đổi của task.
-     */
     public function histories()
     {
         return $this->hasMany(TaskHistory::class);
+    }
+
+    public function attachments()
+    {
+        return $this->hasMany(TaskAttachment::class);
     }
 }

@@ -22,34 +22,21 @@ class Project extends Model
         'leader_id',
     ];
 
-    /**
-     * Lấy leader (User) của dự án.
-     */
     public function leader()
     {
         return $this->belongsTo(User::class, 'leader_id');
     }
 
-    /**
-     * Lấy tất cả tasks của dự án.
-     */
     public function tasks()
     {
         return $this->hasMany(Task::class);
     }
 
-    /**
-     * Lấy tất cả thành viên (Users) tham gia dự án.
-     */
     public function members()
     {
-        // Quan hệ nhiều-nhiều, thông qua bảng 'project_members'
         return $this->belongsToMany(User::class, 'project_members');
     }
 
-    /**
-     * Lấy các bản ghi project_member (pivot model)
-     */
     public function projectMembers()
     {
         return $this->hasMany(ProjectMember::class);

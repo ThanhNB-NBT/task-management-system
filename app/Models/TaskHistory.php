@@ -24,24 +24,17 @@ class TaskHistory extends Model
 
     public $timestamps = false;
 
-    // Dùng json cast để tự động chuyển đổi giữa mảng và chuỗi JSON
     protected $casts = [
         'old_value' => 'array',
         'new_value' => 'array',
         'created_at' => 'datetime',
     ];
 
-    /**
-     * Lấy task mà lịch sử này thuộc về.
-     */
     public function task()
     {
         return $this->belongsTo(Task::class);
     }
 
-    /**
-     * Lấy user (người tạo ra thay đổi).
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
