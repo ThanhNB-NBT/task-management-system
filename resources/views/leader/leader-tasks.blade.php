@@ -29,8 +29,8 @@
                                     <td><span class="badge bg-{{ $task->status=='done' ? 'success' : ($task->status=='in_progress' ? 'warning' : 'secondary') }}">{{ ucfirst($task->status) }}</span></td>
                                     <td>{{ optional($task->assignee)->name ?? 'N/A' }}</td>
                                     <td>
-                                        <a href="{{ \\Illuminate\\Support\\Facades\\Route::has('leader.tasks.show') ? route('leader.tasks.show', $task->id) : url('/leader/tasks/'.$task->id) }}" class="btn btn-sm btn-outline-primary">Xem</a>
-                                        <a href="{{ \\Illuminate\\Support\\Facades\\Route::has('leader.tasks.edit') ? route('leader.tasks.edit', $task->id) : url('/leader/tasks/'.$task->id.'/edit') }}" class="btn btn-sm btn-outline-secondary">Sửa</a>
+                                        <a href="{{ route('leader.tasks.show', $task->id) }}" class="btn btn-sm btn-outline-primary">Xem</a>
+                                        <a href="{{ route('leader.tasks.edit', $task->id) }}" class="btn btn-sm btn-outline-secondary">Sửa</a>
                                     </td>
                                 </tr>
                             @empty

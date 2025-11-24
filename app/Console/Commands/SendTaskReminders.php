@@ -52,6 +52,7 @@ class SendTaskReminders extends Command
                     Notification::create([
                         'user_id' => $task->assignee->id,
                         'message' => $message . '. Please take action.',
+                        'created_at'=> $now,
                     ]);
                     $count++;
                 }
@@ -67,6 +68,7 @@ class SendTaskReminders extends Command
                     Notification::create([
                         'user_id' => $task->project->leader->id,
                         'message' => "[Leader] " . $message . '. Please follow up.',
+                        'created_at'=> $now,
                     ]);
                     $count++;
                 }

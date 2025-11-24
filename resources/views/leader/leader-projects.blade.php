@@ -24,7 +24,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ $project->name }}</h5>
                             <p class="card-text">Progress: {{ $project->progress ?? 0 }}%</p>
-                            <a href="{{ \\Illuminate\\Support\\Facades\\Route::has('leader.projects.manage') ? route('leader.projects.manage', $project->id) : url('/leader/projects/'.$project->id) }}" class="btn btn-sm btn-outline-primary">Quản lý</a>
+                            <a href="{{ route('leader.projects.manage', $project->id) }}" class="btn btn-sm btn-outline-primary">Quản lý</a>
                         </div>
                     </div>
                 </div>

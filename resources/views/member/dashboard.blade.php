@@ -2,176 +2,125 @@
 
 @section('content')
 <div class="container py-4">
-    <!-- Page Title -->
-    <div class="row mb-4">
-        <div class="col-md-8">
-            <h1 class="h3 mb-0">
-                <i class="fas fa-tachometer-alt"></i> {{ __('Member Dashboard') }}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gray-800">
+                <i class="fas fa-tachometer-alt me-2"></i>{{ __('Tổng Quan Công Việc') }}
             </h1>
-            <p class="text-muted small">{{ __('Welcome back!') }} {{ Auth::user()->name }}</p>
+            <p class="text-muted small mb-0">{{ __('Xin chào,') }} <strong>{{ Auth::user()->name }}</strong></p>
         </div>
+        <span class="badge bg-white text-dark border p-2">
+            <i class="far fa-calendar-alt"></i> {{ now()->format('d/m/Y') }}
+        </span>
     </div>
 
-    <!-- Statistics Cards -->
     <div class="row mb-4">
-        <div class="col-md-3 mb-3">
-            <div class="card border-left-primary">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow-sm h-100 py-2">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-primary text-uppercase small font-weight-bold">{{ __('Total Tasks') }}</h6>
-                            <div class="h3 mb-0 font-weight-bold">{{ $stats['total_tasks'] }}</div>
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{ __('Việc Được Giao') }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['total_tasks'] }}</div>
                         </div>
-                        <i class="fas fa-tasks fa-2x text-primary opacity-50"></i>
+                        <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300 text-primary opacity-25"></i></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3 mb-3">
-            <div class="card border-left-warning">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow-sm h-100 py-2">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-warning text-uppercase small font-weight-bold">{{ __('Pending') }}</h6>
-                            <div class="h3 mb-0 font-weight-bold">{{ $stats['pending_tasks'] }}</div>
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">{{ __('Đang Thực Hiện') }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['in_progress_tasks'] }}</div>
                         </div>
-                        <i class="fas fa-hourglass-start fa-2x text-warning opacity-50"></i>
+                        <div class="col-auto"><i class="fas fa-spinner fa-2x text-gray-300 text-info opacity-25"></i></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3 mb-3">
-            <div class="card border-left-info">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow-sm h-100 py-2">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-info text-uppercase small font-weight-bold">{{ __('In Progress') }}</h6>
-                            <div class="h3 mb-0 font-weight-bold">{{ $stats['in_progress_tasks'] }}</div>
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">{{ __('Đã Hoàn Thành') }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['done_tasks'] }}</div>
                         </div>
-                        <i class="fas fa-spinner fa-2x text-info opacity-50"></i>
+                        <div class="col-auto"><i class="fas fa-check-circle fa-2x text-gray-300 text-success opacity-25"></i></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3 mb-3">
-            <div class="card border-left-success">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow-sm h-100 py-2">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-success text-uppercase small font-weight-bold">{{ __('Completed') }}</h6>
-                            <div class="h3 mb-0 font-weight-bold">{{ $stats['done_tasks'] }}</div>
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">{{ __('Chờ Xử Lý') }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['pending_tasks'] }}</div>
                         </div>
-                        <i class="fas fa-check-circle fa-2x text-success opacity-50"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Additional Stats Row -->
-    <div class="row mb-4">
-        <div class="col-md-6 mb-3">
-            <div class="card border-left-secondary">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-secondary text-uppercase small font-weight-bold">{{ __('Projects') }}</h6>
-                            <div class="h3 mb-0 font-weight-bold">{{ $stats['total_projects'] }}</div>
-                        </div>
-                        <i class="fas fa-project-diagram fa-2x text-secondary opacity-50"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 mb-3">
-            <div class="card border-left-danger">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-danger text-uppercase small font-weight-bold">{{ __('Unread Notifications') }}</h6>
-                            <div class="h3 mb-0 font-weight-bold">{{ $stats['unread_notifications'] }}</div>
-                        </div>
-                        <i class="fas fa-bell fa-2x text-danger opacity-50"></i>
+                        <div class="col-auto"><i class="fas fa-hourglass-start fa-2x text-gray-300 text-warning opacity-25"></i></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Main Content Row -->
     <div class="row">
-        <!-- Upcoming Tasks -->
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h6 class="mb-0">
-                        <i class="fas fa-calendar-days"></i> {{ __('Upcoming Tasks') }}
-                        <span class="badge bg-danger float-end">{{ count($upcomingTasks) }}</span>
-                    </h6>
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header py-3 bg-white">
+                    <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-chart-pie me-1"></i> {{ __('Hiệu Suất Của Tôi') }}</h6>
                 </div>
                 <div class="card-body">
+                    <div class="chart-pie pt-2 pb-2">
+                        <canvas id="myTaskChart"></canvas>
+                    </div>
+                    <div class="mt-4 text-center small">
+                        <span class="mr-2"><i class="fas fa-circle text-warning"></i> Pending</span>
+                        <span class="mr-2"><i class="fas fa-circle text-info"></i> Doing</span>
+                        <span class="mr-2"><i class="fas fa-circle text-success"></i> Done</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header py-3 bg-white d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-danger"><i class="fas fa-fire me-1"></i> {{ __('Việc Sắp Tới Hạn') }}</h6>
+                    <span class="badge bg-danger">{{ $upcomingTasks->count() }}</span>
+                </div>
+                <div class="card-body p-0">
                     @if($upcomingTasks->count() > 0)
                         <div class="list-group list-group-flush">
                             @foreach($upcomingTasks as $task)
-                                <a href="{{ route('member.tasks.show', $task) }}" class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between align-items-start mb-1">
-                                        <h6 class="mb-0">{{ $task->title }}</h6>
-                                        <small class="badge bg-{{ $task->status === 'in_progress' ? 'info' : 'warning' }}">
-                                            {{ ucfirst(str_replace('_', ' ', $task->status)) }}
+                                <a href="{{ route('member.tasks.show', $task) }}" class="list-group-item list-group-item-action p-3">
+                                    <div class="d-flex w-100 justify-content-between align-items-center mb-1">
+                                        <h6 class="mb-0 text-dark font-weight-bold">{{ $task->title }}</h6>
+                                        <small class="text-danger font-weight-bold">
+                                            {{ \Carbon\Carbon::parse($task->due_date)->format('d/m H:i') }}
                                         </small>
                                     </div>
-                                    <p class="mb-1 small text-muted">{{ $task->project->name ?? 'N/A' }}</p>
-                                    <small class="text-muted">
-                                        <i class="fas fa-clock"></i>
-                                        {{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('M d, Y') : 'N/A' }}
-                                    </small>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted"><i class="fas fa-folder me-1"></i> {{ $task->project->name }}</small>
+                                        <span class="badge bg-{{ $task->status == 'in_progress' ? 'info' : 'warning' }} text-dark">
+                                            {{ $task->status == 'in_progress' ? 'Đang làm' : 'Chờ' }}
+                                        </span>
+                                    </div>
                                 </a>
                             @endforeach
                         </div>
                     @else
-                        <div class="alert alert-info mb-0">
-                            <i class="fas fa-info-circle"></i> {{ __('No upcoming tasks.') }}
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </div>
-
-        <!-- Recent Tasks -->
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h6 class="mb-0">
-                        <i class="fas fa-clock"></i> {{ __('Recent Tasks') }}
-                        <span class="badge bg-info float-end">{{ count($recentTasks) }}</span>
-                    </h6>
-                </div>
-                <div class="card-body">
-                    @if($recentTasks->count() > 0)
-                        <div class="list-group list-group-flush">
-                            @foreach($recentTasks as $task)
-                                <a href="{{ route('member.tasks.show', $task) }}" class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between align-items-start mb-1">
-                                        <h6 class="mb-0">{{ $task->title }}</h6>
-                                        <small class="badge bg-{{ $task->status === 'done' ? 'success' : ($task->status === 'in_progress' ? 'info' : 'warning') }}">
-                                            {{ ucfirst(str_replace('_', ' ', $task->status)) }}
-                                        </small>
-                                    </div>
-                                    <p class="mb-1 small text-muted">{{ $task->project->name ?? 'N/A' }}</p>
-                                    <small class="text-muted">
-                                        <i class="fas fa-calendar-alt"></i>
-                                        {{ $task->created_at->format('M d, Y H:i') }}
-                                    </small>
-                                </a>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="alert alert-info mb-0">
-                            <i class="fas fa-info-circle"></i> {{ __('No recent tasks.') }}
+                        <div class="text-center py-5 text-muted">
+                            <i class="fas fa-calendar-check fa-3x mb-3 opacity-50"></i>
+                            <p>Bạn không có việc nào gấp trong 3 ngày tới.</p>
                         </div>
                     @endif
                 </div>
@@ -180,33 +129,37 @@
     </div>
 </div>
 
-<!-- Custom CSS for card styling -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var ctx = document.getElementById("myTaskChart");
+    if(ctx) {
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ["Pending", "In Progress", "Done"],
+                datasets: [{
+                    data: [{{ $stats['pending_tasks'] }}, {{ $stats['in_progress_tasks'] }}, {{ $stats['done_tasks'] }}],
+                    backgroundColor: ['#f6c23e', '#36b9cc', '#1cc88a'],
+                    hoverBackgroundColor: ['#dda20a', '#2c9faf', '#17a673'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                legend: { display: false },
+                cutoutPercentage: 70,
+            },
+        });
+    }
+});
+</script>
+
 <style>
-    .border-left-primary {
-        border-left: 4px solid #007bff !important;
-    }
-    .border-left-warning {
-        border-left: 4px solid #ffc107 !important;
-    }
-    .border-left-info {
-        border-left: 4px solid #17a2b8 !important;
-    }
-    .border-left-success {
-        border-left: 4px solid #28a745 !important;
-    }
-    .border-left-danger {
-        border-left: 4px solid #dc3545 !important;
-    }
-    .border-left-secondary {
-        border-left: 4px solid #6c757d !important;
-    }
-    
-    .opacity-50 {
-        opacity: 0.5;
-    }
-    
-    .list-group-item-action:hover {
-        background-color: #f8f9fa;
-    }
+    .border-left-primary { border-left: 4px solid #4e73df !important; }
+    .border-left-success { border-left: 4px solid #1cc88a !important; }
+    .border-left-info { border-left: 4px solid #36b9cc !important; }
+    .border-left-warning { border-left: 4px solid #f6c23e !important; }
+    .chart-pie { position: relative; height: 250px; width: 100%; }
 </style>
 @endsection

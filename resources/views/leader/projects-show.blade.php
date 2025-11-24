@@ -2,276 +2,234 @@
 
 @section('content')
 <div class="container py-4">
-    <!-- Page Title -->
+    <div class="mb-3">
+        <a href="{{ route('leader.projects.index') }}" class="btn btn-light btn-sm shadow-sm text-secondary">
+            <i class="fas fa-arrow-left me-1"></i> {{ __('Quay lại danh sách') }}
+        </a>
+    </div>
+
     <div class="row mb-4">
         <div class="col-md-8">
-            <h1 class="h3 mb-0">
-                <i class="fas fa-project-diagram"></i> {{ $project->name }}
-            </h1>
-            <p class="text-muted small">{{ $project->description ?? 'No description' }}</p>
+            <div class="d-flex align-items-center">
+                <h1 class="h3 mb-0 text-primary fw-bold">
+                    <i class="fas fa-folder-open me-2"></i>{{ $project->name }}
+                </h1>
+                <span class="badge bg-secondary ms-3">#{{ $project->id }}</span>
+            </div>
+            <p class="text-muted mt-2 mb-0">{{ $project->description ?? 'Chưa có mô tả chi tiết' }}</p>
+            <div class="mt-2 text-small text-muted">
+                <i class="far fa-calendar-alt me-1"></i>
+                {{ \Carbon\Carbon::parse($project->start_date)->format('d/m/Y') }}
+                @if($project->end_date)
+                    - {{ \Carbon\Carbon::parse($project->end_date)->format('d/m/Y') }}
+                @endif
+            </div>
         </div>
-        <div class="col-md-4 text-end">
-            <a href="{{ route('leader.projects.index') }}" class="btn btn-outline-secondary">
-                <i class="fas fa-arrow-left"></i> {{ __('Back') }}
-            </a>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <div class="btn-group shadow-sm">
+                <a href="{{ route('leader.projects.edit', $project->id) }}" class="btn btn-outline-primary">
+                    <i class="fas fa-edit"></i> Sửa Dự Án
+                </a>
+                <a href="{{ route('leader.tasks.create', ['project_id' => $project->id]) }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Thêm Task
+                </a>
+            </div>
         </div>
     </div>
 
-    <!-- Statistics Cards -->
     <div class="row mb-4">
-        <div class="col-md-3 mb-3">
-            <div class="card border-left-primary">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-primary text-uppercase small font-weight-bold">{{ __('Total Tasks') }}</h6>
-                            <div class="h3 mb-0 font-weight-bold">{{ $project->tasks_count }}</div>
-                        </div>
-                        <i class="fas fa-tasks fa-2x text-primary opacity-50"></i>
-                    </div>
+        <div class="col-md-3 col-6 mb-3">
+            <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body text-center">
+                    <h3 class="fw-bold text-primary mb-0">{{ $project->tasks_count }}</h3>
+                    <small class="text-muted text-uppercase">Tổng Task</small>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-3 mb-3">
-            <div class="card border-left-warning">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-warning text-uppercase small font-weight-bold">{{ __('Pending') }}</h6>
-                            <div class="h3 mb-0 font-weight-bold">{{ $taskStats['pending'] }}</div>
-                        </div>
-                        <i class="fas fa-hourglass-start fa-2x text-warning opacity-50"></i>
-                    </div>
+        <div class="col-md-3 col-6 mb-3">
+            <div class="card border-0 shadow-sm bg-warning bg-opacity-10">
+                <div class="card-body text-center">
+                    <h3 class="fw-bold text-warning mb-0">{{ $taskStats['pending'] }}</h3>
+                    <small class="text-muted text-uppercase">Chờ xử lý</small>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-3 mb-3">
-            <div class="card border-left-info">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-info text-uppercase small font-weight-bold">{{ __('In Progress') }}</h6>
-                            <div class="h3 mb-0 font-weight-bold">{{ $taskStats['in_progress'] }}</div>
-                        </div>
-                        <i class="fas fa-spinner fa-2x text-info opacity-50"></i>
-                    </div>
+        <div class="col-md-3 col-6 mb-3">
+            <div class="card border-0 shadow-sm bg-info bg-opacity-10">
+                <div class="card-body text-center">
+                    <h3 class="fw-bold text-info mb-0">{{ $taskStats['in_progress'] }}</h3>
+                    <small class="text-muted text-uppercase">Đang làm</small>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-3 mb-3">
-            <div class="card border-left-success">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-success text-uppercase small font-weight-bold">{{ __('Done') }}</h6>
-                            <div class="h3 mb-0 font-weight-bold">{{ $taskStats['done'] }}</div>
-                        </div>
-                        <i class="fas fa-check-circle fa-2x text-success opacity-50"></i>
-                    </div>
+        <div class="col-md-3 col-6 mb-3">
+            <div class="card border-0 shadow-sm bg-success bg-opacity-10">
+                <div class="card-body text-center">
+                    <h3 class="fw-bold text-success mb-0">{{ $taskStats['done'] }}</h3>
+                    <small class="text-muted text-uppercase">Hoàn thành</small>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Progress Bar -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <p class="text-muted small mb-2">{{ __('Overall Progress') }}</p>
-                    @php
-                        $total = $project->tasks_count;
-                        $done = $taskStats['done'];
-                        $progress = $total > 0 ? round(($done / $total) * 100) : 0;
-                    @endphp
-                    <div class="progress" style="height: 25px;">
-                        <div class="progress-bar bg-success" role="progressbar" 
-                             style="width: {{ $progress }}%;" 
-                             aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100">
-                            {{ $progress }}% {{ __('Complete') }}
-                        </div>
-                    </div>
+    @php
+        $totalTasks = $project->tasks_count;
+        $doneTasks = $taskStats['done'];
+        $progress = $totalTasks > 0 ? round(($doneTasks / $totalTasks) * 100) : 0;
+    @endphp
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between mb-1">
+                <span class="fw-bold text-muted small">Tiến độ tổng thể ({{ $doneTasks }}/{{ $totalTasks }})</span>
+                <span class="fw-bold {{ $progress == 100 ? 'text-success' : 'text-primary' }}">{{ $progress }}%</span>
+            </div>
+            <div class="progress" style="height: 10px;">
+                <div class="progress-bar {{ $progress == 100 ? 'bg-success' : 'bg-primary' }}"
+                     role="progressbar"
+                     style="width: {{ $progress }}%"
+                     aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100">
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Main Content Row -->
     <div class="row">
-        <!-- Upcoming Tasks -->
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h6 class="mb-0">
-                        <i class="fas fa-calendar-days"></i> {{ __('Upcoming Tasks') }}
-                        <span class="badge bg-danger float-end">{{ $upcomingTasks->count() }}</span>
-                    </h6>
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow-sm border-0 fixed-height-card">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold"><i class="fas fa-tasks text-primary me-2"></i>{{ __('Công Việc') }}</h5>
+                    <small class="text-muted">Hiển thị 5 task/trang</small>
                 </div>
-                <div class="card-body">
-                    @if($upcomingTasks->count() > 0)
-                        <div class="list-group list-group-flush">
-                            @foreach($upcomingTasks as $task)
-                                <a href="{{ route('leader.tasks.show', $task) }}" class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between align-items-start mb-1">
-                                        <h6 class="mb-0">{{ $task->title }}</h6>
-                                        <small class="badge bg-{{ $task->status === 'in_progress' ? 'info' : 'warning' }}">
-                                            {{ ucfirst(str_replace('_', ' ', $task->status)) }}
-                                        </small>
-                                    </div>
-                                    <p class="mb-1 small text-muted">{{ $task->assignee->name ?? __('Unassigned') }}</p>
-                                    <small class="text-muted">
-                                        <i class="fas fa-clock"></i>
-                                        {{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('M d, Y H:i') : 'N/A' }}
-                                    </small>
-                                </a>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="alert alert-info mb-0">
-                            <i class="fas fa-info-circle"></i> {{ __('No upcoming tasks.') }}
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </div>
 
-        <!-- Project Info Sidebar -->
-        <div class="col-md-4">
-            <!-- Team Members -->
-            <div class="card mb-4">
-                <div class="card-header bg-light">
-                    <h6 class="mb-0">
-                        <i class="fas fa-users"></i> {{ __('Team Members') }}
-                        <span class="badge bg-secondary float-end">{{ $project->members_count }}</span>
-                    </h6>
-                </div>
-                <div class="card-body">
-                    @if($project->members_count > 0)
-                        <div class="list-group list-group-flush">
-                            @foreach($project->members as $member)
-                                <div class="list-group-item d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <h6 class="mb-0 small">{{ $member->name }}</h6>
-                                        <small class="text-muted">{{ $member->email }}</small>
-                                    </div>
-                                    <span class="badge bg-{{ $member->role === 'admin' ? 'danger' : ($member->role === 'leader' ? 'primary' : 'secondary') }}">
-                                        {{ ucfirst($member->role) }}
-                                    </span>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <p class="text-muted small mb-0">{{ __('No team members assigned.') }}</p>
-                    @endif
-                </div>
-            </div>
-
-            <!-- Project Details -->
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h6 class="mb-0">{{ __('Project Details') }}</h6>
-                </div>
-                <div class="card-body small">
-                    <p class="mb-2">
-                        <strong>{{ __('Status') }}:</strong><br>
-                        <span class="badge bg-info">{{ ucfirst($project->status ?? 'active') }}</span>
-                    </p>
-                    <p class="mb-2">
-                        <strong>{{ __('Created At') }}:</strong><br>
-                        {{ $project->created_at->format('M d, Y') }}
-                    </p>
-                    @if($project->end_date)
-                        <p class="mb-0">
-                            <strong>{{ __('End Date') }}:</strong><br>
-                            {{ \Carbon\Carbon::parse($project->end_date)->format('M d, Y') }}
-                        </p>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- All Tasks Table -->
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h6 class="mb-0">
-                        <i class="fas fa-list"></i> {{ __('All Tasks') }}
-                    </h6>
-                </div>
-                <div class="card-body">
-                    @if($project->tasks->count() > 0)
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead class="table-light">
+                <div class="card-body p-0 d-flex flex-column justify-content-between h-100">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light text-secondary small text-uppercase">
+                                <tr>
+                                    <th class="ps-3" style="width: 35%;">Tên Task</th>
+                                    <th style="width: 15%;">Độ ưu tiên</th>
+                                    <th style="width: 20%;">Người làm</th>
+                                    <th style="width: 15%;">Hạn chót</th>
+                                    <th style="width: 15%;">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($tasks as $task)
                                     <tr>
-                                        <th>{{ __('Title') }}</th>
-                                        <th>{{ __('Assigned To') }}</th>
-                                        <th>{{ __('Status') }}</th>
-                                        <th>{{ __('Due Date') }}</th>
-                                        <th>{{ __('Actions') }}</th>
+                                        <td class="ps-3">
+                                            <a href="{{ route('leader.tasks.show', $task->id) }}" class="text-decoration-none fw-bold text-dark d-block text-truncate" style="max-width: 200px;">
+                                                {{ $task->title }}
+                                            </a>
+                                        </td>
+
+                                        <td>
+                                            @if($task->priority == 'high')
+                                                <span class="badge bg-danger">Cao</span>
+                                            @elseif($task->priority == 'medium')
+                                                <span class="badge bg-warning text-dark">Trung bình</span>
+                                            @else
+                                                <span class="badge bg-secondary">Thấp</span>
+                                            @endif
+                                        </td>
+
+                                        <td>
+                                            @if($task->assignee)
+                                                <div class="d-flex align-items-center" title="{{ $task->assignee->name }}">
+                                                    <div class="avatar-sm rounded-circle bg-primary text-white d-flex justify-content-center align-items-center me-2 small" style="width: 24px; height: 24px; font-size: 10px;">
+                                                        {{ substr($task->assignee->name, 0, 1) }}
+                                                    </div>
+                                                    <span class="small text-truncate" style="max-width: 80px;">{{ $task->assignee->name }}</span>
+                                                </div>
+                                            @else
+                                                <span class="text-muted small fst-italic">--</span>
+                                            @endif
+                                        </td>
+
+                                        <td>
+                                            <span class="small {{ ($task->due_date && $task->due_date < now() && $task->status != 'done') ? 'text-danger fw-bold' : 'text-muted' }}">
+                                                {{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m') : '--' }}
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            @if($task->status == 'done')
+                                                <span class="badge bg-success">Hoàn thành</span>
+                                            @elseif($task->status == 'in_progress')
+                                                <span class="badge bg-info text-dark">Đang thực hiện</span>
+                                            @else
+                                                <span class="badge bg-light text-dark border">Chờ xử lý</span>
+                                            @endif
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($project->tasks as $task)
-                                        <tr>
-                                            <td>
-                                                <strong>{{ $task->title }}</strong>
-                                            </td>
-                                            <td>
-                                                <small>{{ $task->assignee->name ?? __('Unassigned') }}</small>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-{{ $task->status === 'done' ? 'success' : ($task->status === 'in_progress' ? 'info' : 'warning') }}">
-                                                    {{ ucfirst(str_replace('_', ' ', $task->status)) }}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <small class="text-muted">
-                                                    {{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('M d, Y') : 'N/A' }}
-                                                </small>
-                                            </td>
-                                            <td>
-                                                <a href="{{ route('leader.tasks.show', $task) }}" class="btn btn-sm btn-outline-primary" title="{{ __('View') }}">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    @else
-                        <div class="alert alert-info mb-0">
-                            <i class="fas fa-info-circle"></i> {{ __('No tasks in this project.') }}
-                        </div>
-                    @endif
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4 text-muted">
+                                            Chưa có task nào.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="px-3 py-3 border-top">
+                        {{ $tasks->links() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm border-0 fixed-height-card">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold"><i class="fas fa-users text-success me-2"></i>{{ __('Thành Viên') }}</h5>
+                    <a href="{{ route('leader.team.index', ['project_id' => $project->id]) }}" class="btn btn-sm btn-outline-success">
+                        <i class="fas fa-cog"></i> Quản lý
+                    </a>
+                </div>
+                <div class="card-body overflow-auto" style="max-height: 400px;">
+                    <ul class="list-group list-group-flush">
+                        @forelse($project->members as $member)
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-bottom-dashed">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle bg-light text-dark rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 38px; height: 38px; font-weight: 600;">
+                                        {{ substr($member->name, 0, 1) }}
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 text-dark small fw-bold">{{ $member->name }}</h6>
+                                        <small class="text-muted" style="font-size: 0.75rem;">{{ $member->email }}</small>
+                                    </div>
+                                </div>
+                                <span class="badge {{ $member->pivot->role_in_project == 'leader' ? 'bg-primary' : 'bg-light text-secondary border' }}">
+                                    {{ ucfirst($member->pivot->role_in_project) }}
+                                </span>
+                            </li>
+                        @empty
+                            <li class="text-center text-muted py-3">Chưa có thành viên nào.</li>
+                        @endforelse
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Custom CSS for card styling -->
 <style>
-    .border-left-primary {
-        border-left: 4px solid #007bff !important;
+    .fixed-height-card {
+        min-height: 500px;
+        display: flex;
+        flex-direction: column;
     }
-    .border-left-warning {
-        border-left: 4px solid #ffc107 !important;
+    .border-bottom-dashed {
+        border-bottom: 1px dashed #eff2f7 !important;
     }
-    .border-left-info {
-        border-left: 4px solid #17a2b8 !important;
+    .pagination {
+        margin-bottom: 0;
+        justify-content: center;
     }
-    .border-left-success {
-        border-left: 4px solid #28a745 !important;
-    }
-    .opacity-50 {
-        opacity: 0.5 !important;
+    .page-item .page-link {
+        font-size: 0.85rem;
+        padding: 0.3rem 0.6rem;
     }
 </style>
 @endsection
