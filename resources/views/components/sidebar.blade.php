@@ -8,11 +8,11 @@
     {{-- Main Menu Items --}}
     <ul class="nav flex-column">
         @php $role = Auth::user()->role ?? 'member'; @endphp
-        
+
         {{-- Dashboard --}}
         <li class="nav-item">
             @if($role === 'admin')
-                <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" 
+                <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
                    href="{{ route('admin.dashboard') }}">
                     <i class="fas fa-home"></i> Dashboard
                 </a>
@@ -70,8 +70,8 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('leader.team') ? 'active' : '' }}"
-                   href="{{ route('leader.team') }}">
+                <a class="nav-link {{ request()->routeIs('leader.team.index') ? 'active' : '' }}"
+                   href="{{ route('leader.team.index') }}">
                     <i class="fas fa-users"></i> Đội Nhóm
                 </a>
             </li>

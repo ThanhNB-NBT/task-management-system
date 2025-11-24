@@ -5,6 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property int $project_id
+ * @property int $user_id
+ * @property string $role_in_project
+ * @property string|null $created_at
+ * @property string|null $updated_at
+ * @property-read \App\Models\Project $project
+ * @property-read \App\Models\User $user
+ * @method static \Database\Factories\ProjectMemberFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectMember newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectMember newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectMember query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectMember whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectMember whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectMember whereProjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectMember whereRoleInProject($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectMember whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectMember whereUserId($value)
+ * @mixin \Eloquent
+ */
 class ProjectMember extends Model
 {
     use HasFactory;

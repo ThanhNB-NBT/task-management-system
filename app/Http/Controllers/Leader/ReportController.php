@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Leader;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Models\Project;
 
 class ReportController extends Controller
 {
@@ -11,7 +13,7 @@ class ReportController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
+
         $projects = $user->ledProjects()
             ->with(['tasks', 'members'])
             ->withCount(['tasks', 'members'])
@@ -30,5 +32,36 @@ class ReportController extends Controller
         }
 
         return view('leader.reports', compact('projects', 'taskStats'));
+    }
+
+    public function projectProgress(Request $request)
+    {
+        $projectId = $request->get('project_id');
+        $project = Project::withCount(['tasks', 'tasks as done_count' => function ($q) {
+            $q->where('status', 'done');
+        }])->findOrFail($projectId);
+
+        $total = $project->tasks_count;
+        $done = $project->done_count;
+        $progress = $total ? round($done / $total * 100) : 0;
+
+        return response()->json([
+            'project_id' => $project->id,
+            'progress' => $progress,
+            'total' => $total,
+            'done' => $done,
+        ]);
+    }
+
+    public function exportCsv(Request $request)
+    {
+        // Placeholder
+        return back()->with('info', 'CSV export not implemented in skeleton.');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        // Placeholder
+        return back()->with('info', 'PDF export not implemented in skeleton.');
     }
 }

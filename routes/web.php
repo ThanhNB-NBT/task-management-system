@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\App;
 
 //Admin Controllers
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -17,6 +19,8 @@ use App\Http\Controllers\Leader\ProjectController as LeaderProjectController;
 use App\Http\Controllers\Leader\TaskController as LeaderTaskController;
 use App\Http\Controllers\Leader\TeamController as LeaderTeamController;
 use App\Http\Controllers\Leader\ReportController as LeaderReportController;
+use App\Http\Controllers\Leader\TaskCommentController as LeaderTaskCommentController;
+
 
 //Member Controllers
 use App\Http\Controllers\Member\DashboardController;
@@ -25,26 +29,24 @@ use App\Http\Controllers\Member\TaskController;
 use App\Http\Controllers\Member\TaskCommentController;
 use App\Http\Controllers\Member\NotificationController;
 use App\Http\Controllers\TaskAttachmentController;
-
 Route::get('/', function () {
-    return redirect()->route('login');
+    return Redirect::route('login');
 });
 
 // Dashboard tự động redirect theo role
 Route::get('/dashboard', function () {
     $user = Auth::user();
-
     switch ($user->role) {
         case 'admin':
-            return redirect()->route('admin.dashboard');
+            return Redirect::route('admin.dashboard');
         case 'leader':
-            return redirect()->route('leader.dashboard');
+            return Redirect::route('leader.dashboard');
         case 'member':
-            return redirect()->route('member.dashboard');
         default:
-            abort(403, 'Unauthorized');
+            App::abort(403, 'Unauthorized');
     }
-})->middleware(['auth', 'verified'])->name('dashboard');
+    }
+)->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -55,13 +57,13 @@ Route::middleware('auth')->group(function () {
 // Admin routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-    
+
     // Users Management
     Route::resource('users', UserController::class);
-    
+
     // Projects Management
     Route::resource('projects', ProjectController::class);
-    
+
     // Reports
     Route::get('reports', [ReportController::class, 'index'])->name('reports');
     Route::get('reports/users', [ReportController::class, 'users'])->name('reports.users');
@@ -76,7 +78,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('reports/tasks', [ReportController::class, 'tasks'])->name('reports.tasks');
     Route::get('reports/tasks/export/excel', [ReportController::class, 'exportTasksExcel'])->name('reports.tasks.export.excel');
     Route::get('reports/tasks/export/pdf', [ReportController::class, 'exportTasksPdf'])->name('reports.tasks.export.pdf');
-    
+
     // System Settings
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
@@ -85,16 +87,29 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 // Leader routes
 Route::middleware(['auth', 'leader'])->prefix('leader')->name('leader.')->group(function () {
     Route::get('/dashboard', [LeaderDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/projects', [LeaderProjectController::class, 'index'])->name('projects.index');
-    Route::get('/projects/{id}', [LeaderProjectController::class, 'show'])->name('projects.show');
-    Route::get('/tasks', [LeaderTaskController::class, 'index'])->name('tasks.index');
-    Route::get('/tasks/{id}', [LeaderTaskController::class, 'show'])->name('tasks.show');
-    Route::get('/team', [LeaderTeamController::class, 'index'])->name('team');
+
+    // Projects Management
+    Route::resource('projects', LeaderProjectController::class);
+
+    // Tasks Management
+    Route::resource('tasks', LeaderTaskController::class);
+    Route::patch('/tasks/{id}/reopen', [LeaderTaskController::class, 'reopen'])->name('tasks.reopen');
+
+    // Task Comments
+    Route::post('/tasks/{id}/comments', [LeaderTaskCommentController::class, 'store'])->name('tasks.comments.store');
+
+    // Team Management
+    Route::get('/team', [LeaderTeamController::class, 'index'])->name('team.index');
+    Route::post('/team', [LeaderTeamController::class, 'store'])->name('team.store'); // Thêm thành viên
+    Route::delete('/team/{id}', [LeaderTeamController::class, 'destroy'])->name('team.destroy'); // Xóa thành viên
+
+    // Reports
     Route::get('/reports', [LeaderReportController::class, 'index'])->name('reports');
+
     // Task attachments for leaders (same controller)
-    Route::post('/tasks/{id}/attachments', [\App\Http\Controllers\TaskAttachmentController::class, 'store'])->name('tasks.attachments.store');
-    Route::get('/tasks/attachments/{id}/download', [\App\Http\Controllers\TaskAttachmentController::class, 'download'])->name('tasks.attachments.download');
-    Route::delete('/tasks/attachments/{id}', [\App\Http\Controllers\TaskAttachmentController::class, 'destroy'])->name('tasks.attachments.destroy');
+    Route::post('/tasks/{id}/attachments', [TaskAttachmentController::class, 'store'])->name('tasks.attachments.store');
+    Route::get('/tasks/attachments/{id}/download', [TaskAttachmentController::class, 'download'])->name('tasks.attachments.download');
+    Route::delete('/tasks/attachments/{id}', [TaskAttachmentController::class, 'destroy'])->name('tasks.attachments.destroy');
 });
 
 
