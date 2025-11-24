@@ -11,27 +11,6 @@
 
 > Hệ thống quản lý công việc toàn diện được xây dựng bằng Laravel, thiết kế cho cộng tác nhóm với phân quyền theo vai trò (Admin, Leader, Member).
 
----
-
-## 📑 Mục Lục
-
-- [Giới Thiệu Dự Án](#giới-thiệu-dự-án)
-- [Tính Năng](#tính-năng)
-- [Công Nghệ Sử Dụng](#công-nghệ-sử-dụng)
-- [Bắt Đầu](#bắt-đầu)
-  - [Yêu Cầu Hệ Thống](#yêu-cầu-hệ-thống)
-  - [Cài Đặt](#cài-đặt)
-  - [Thiết Lập Database](#thiết-lập-database)
-- [Cấu Trúc Dự Án](#cấu-trúc-dự-án)
-- [Phân Công Nhóm](#phân-công-nhóm)
-- [Quy Trình Git](#quy-trình-git)
-- [Hướng Dẫn Phát Triển](#hướng-dẫn-phát-triển)
-- [Xử Lý Sự Cố](#xử-lý-sự-cố)
-- [Đóng Góp](#đóng-góp)
-- [Giấy Phép](#giấy-phép)
-
----
-
 ## 🎯 Giới Thiệu Dự Án
 
 Hệ Thống Quản Lý Công Việc là một ứng dụng web được thiết kế để cộng tác nhóm và theo dõi dự án hiệu quả. Hệ thống triển khai 3 vai trò chính:
@@ -204,15 +183,15 @@ php artisan migrate:fresh --seed
 ### Thêm Dữ Liệu Mẫu
 
 ```bash
-# Chạy seeder cụ thể
-php artisan db:seed --class=AdminSeeder
-php artisan db:seed --class=UserSeeder
-
 # Chạy tất cả seeders
 php artisan db:seed
 ```
+### Chạy NPM
+```bash
+npm install
 
----
+```
+
 
 ## 📁 Cấu Trúc Dự Án
 
@@ -297,8 +276,6 @@ task-management-system/
 └── README.md                        # File này
 ```
 
----
-
 ## 🌳 Quy Trình Git
 
 ### Chiến Lược Branch
@@ -316,61 +293,6 @@ main (production - sản phẩm)
   │     ├── feature/leader-tasks
   │     ├── feature/member-tasks
   │     └── feature/member-comments
-```
-
-### Quy Trình Làm Việc Hàng Ngày
-
-#### 1. Bắt Đầu Feature Mới
-
-```bash
-# Chuyển sang branch dev và cập nhật code mới nhất
-git checkout dev
-git pull origin dev
-
-# Tạo branch feature mới
-git checkout -b feature/ten-feature-cua-ban
-```
-
-#### 2. Làm Việc Trên Feature
-
-```bash
-# Kiểm tra trạng thái
-git status
-
-# Thêm các thay đổi
-git add .
-
-# Commit với message rõ ràng
-git commit -m "[ADD] Thêm trang danh sách user"
-```
-
-#### 3. Đẩy Lên GitHub
-
-```bash
-# Push branch lên remote
-git push origin feature/ten-feature-cua-ban
-```
-
-#### 4. Tạo Pull Request
-
-1. Vào GitHub repository
-2. Click **Compare & pull request**
-3. Chọn base: `dev` và compare: `feature/ten-feature-cua-ban`
-4. Viết mô tả rõ ràng
-5. Tag 1-2 người review
-6. Tạo Pull Request
-
-#### 5. Sau Khi Merge
-
-```bash
-# Quay lại branch dev
-git checkout dev
-
-# Cập nhật code đã merge
-git pull origin dev
-
-# Xóa branch feature (tùy chọn)
-git branch -d feature/ten-feature-cua-ban
 ```
 
 ### Quy Tắc Commit Message
@@ -393,199 +315,6 @@ git commit -m "[FIX] Sửa lỗi validate form đăng nhập"
 git commit -m "[UPDATE] Cải thiện hiệu suất danh sách task"
 git commit -m "[DOCS] Cập nhật README với hướng dẫn setup"
 ```
-
-### Xử Lý Xung Đột (Conflict)
-
-```bash
-# Cập nhật dev mới nhất
-git checkout dev
-git pull origin dev
-
-# Quay lại branch feature của bạn
-git checkout feature/ten-feature-cua-ban
-
-# Merge dev vào branch feature
-git merge dev
-
-# Nếu có conflict, mở file bị conflict và sửa
-# Sau đó:
-git add .
-git commit -m "[FIX] Giải quyết conflict với branch dev"
-git push origin feature/ten-feature-cua-ban
-```
-
----
-
-## 📋 Hướng Dẫn Phát Triển
-
-### Phong Cách Code
-
-- Tuân theo [chuẩn PSR-12](https://www.php-fig.org/psr/psr-12/)
-- Đặt tên biến và hàm có ý nghĩa
-- Thêm comment cho logic phức tạp
-- Giữ các hàm ngắn gọn và tập trung
-
-### Quy Tắc Đặt Tên
-
-```php
-// Controllers: PascalCase + hậu tố Controller
-UserController, ProjectController
-
-// Models: PascalCase, số ít
-User, Project, Task
-
-// Bảng database: snake_case, số nhiều
-users, projects, tasks, project_members
-
-// Biến: camelCase
-$userName, $projectList, $taskStatus
-
-// Hàm: camelCase
-getUserById(), createProject(), updateTaskStatus()
-
-// Hằng số: UPPER_SNAKE_CASE
-MAX_UPLOAD_SIZE, DEFAULT_ROLE
-```
-
-### Quy Ước Database
-
-```php
-// Khóa chính
-id (unsigned big integer, auto increment)
-
-// Khóa ngoại
-user_id, project_id, task_id
-
-// Timestamps
-created_at, updated_at, deleted_at
-
-// Trường boolean
-is_active, is_completed, is_deleted
-
-// Trường trạng thái
-status (enum hoặc string)
-```
-
----
-
-## ✅ Checklist Kiểm Tra
-
-### Trước Khi Commit
-
-```
-□ Code chạy không có lỗi
-□ Test thủ công tất cả tính năng mới
-□ Kiểm tra lỗi console (trình duyệt/server)
-□ Xác minh các query database được tối ưu
-□ Xóa code debug và console.log
-□ Format code đúng chuẩn
-□ Cập nhật comment nếu cần
-```
-
-### Trước Khi Tạo PR
-
-```
-□ Pull branch dev mới nhất
-□ Giải quyết mọi conflict
-□ Chạy php artisan test (nếu có tests)
-□ Test trên database mới (migrate:fresh)
-□ Kiểm tra responsive (cho frontend)
-□ Xác minh không có dữ liệu nhạy cảm trong code
-□ Viết mô tả PR rõ ràng
-```
-
----
-
-## 🐛 Xử Lý Sự Cố
-
-### Các Vấn Đề Thường Gặp & Giải Pháp
-
-#### 1. Không Pull Được Code
-
-```bash
-# Reset về phiên bản remote
-git fetch origin
-git reset --hard origin/dev
-```
-
-#### 2. Commit Nhầm Vào Branch Khác
-
-```bash
-# Hoàn tác commit nhưng giữ lại thay đổi
-git reset --soft HEAD~1
-
-# Tạo branch đúng và chuyển qua
-git checkout -b feature/branch-dung
-```
-
-#### 3. Xóa Nhầm Code
-
-```bash
-# Khôi phục file đã xóa
-git checkout HEAD -- filename.php
-```
-
-#### 4. Composer Install Lỗi
-
-```bash
-# Xóa cache composer
-composer clear-cache
-
-# Cài đặt bỏ qua yêu cầu platform
-composer install --ignore-platform-reqs
-```
-
-#### 5. Lỗi Migration
-
-```bash
-# Rollback và chạy lại
-php artisan migrate:rollback
-php artisan migrate
-
-# Hoặc cài đặt mới hoàn toàn
-php artisan migrate:fresh
-```
-
-#### 6. Lỗi Phân Quyền (Windows)
-
-```bash
-# Chạy Laragon với quyền Administrator
-# Hoặc set phân quyền thư mục trong Windows Explorer
-```
-
-#### 7. Port Đã Được Sử Dụng
-
-```bash
-# Kiểm tra cái gì đang dùng port 80
-netstat -ano | findstr :80
-
-# Đổi port Apache trong settings Laragon
-# Hoặc dừng service đang conflict
-```
-
----
-
-## 🤝 Đóng Góp
-
-Mọi đóng góp đều làm cho dự án này tốt hơn. Mọi đóng góp của bạn đều được **đánh giá cao**.
-
-1. Tạo Feature Branch của bạn (`git checkout -b feature/TinhNangTuyetVoi`)
-2. Commit thay đổi (`git commit -m '[ADD] Thêm tính năng tuyệt vời'`)
-3. Push lên Branch (`git push origin feature/TinhNangTuyetVoi`)
-4. Mở Pull Request
-5. Đợi code review
-6. Thực hiện thay đổi nếu được yêu cầu
-
-### Hướng Dẫn Pull Request
-
-- Viết tiêu đề và mô tả PR rõ ràng
-- Tham chiếu đến issues liên quan nếu có
-- Thêm ảnh chụp màn hình cho thay đổi UI
-- Tag ít nhất một người review
-- Đảm bảo CI/CD checks pass
-- Giữ PR tập trung và nhỏ gọn
-
----
 
 ## 🎓 Các Lệnh Nhanh
 
@@ -622,10 +351,5 @@ php artisan db:seed --class=TenSeeder
 
 ---
 
-**Quy Tắc Vàng**: Khi gặp vấn đề → Hỏi ngay, đừng ngồi một mình! 🚀
-
----
-
-*Phiên bản tài liệu: 1.0*  
-*Cập nhật lần cuối: 28 tháng 10, 2025*  
-*Duy trì bởi: ThanhNB-NBT*
+*Phiên bản tài liệu: 1.1*  
+*Cập nhật lần cuối: 24 tháng 11, 2025*  
